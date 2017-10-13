@@ -1,0 +1,3 @@
+[ERROR] this line couldnt convert unicode
+patch_url: https://issues.apache.org//jira/secure/attachment/12638215/SOLR-5943.patch, line: 91
+file content: b'--- solr/solrj/src/java/org/apache/solr/client/solrj/request/AbstractUpdateRequest.java\t(r\xe9vision 1582767)\r\n'
