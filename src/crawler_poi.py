@@ -5,13 +5,13 @@ from urllib import request
 from multiprocessing import Process
 from tqdm import tqdm
 
-PATCH_DOMAIN_URL = 'https://issues.apache.org'
+PATCH_DOMAIN_URL = 'https://bz.apache.org/bugzilla/'
 MODULE_POST_STRING = '.java'
 METRICS_DIR = ''
 
 
 def export_bug_modules(version, module_set):
-    filename = 'slr_{}_bgmd.csv'.format(version[1:])
+    filename = 'poi_{}_bgmd.csv'.format(version)
     with open(filename, mode='w', encoding='utf-8') as fh:
         for module in module_set:
             fh.write('{}\n'.format(module))
@@ -52,15 +52,14 @@ def get_fixed_bug_url(url):
             url_list = __get_fixed_report_url(tbody)
             url_dict[versions[version_idx]] = url_list
             version_idx += 1
-        print(url_dict)
     return url_dict
 
 def get_patch_file_url(url):
     source = request.urlopen(url)
     soup = BeautifulSoup(source, "lxml")
     patch_urls = []
-    for div in soup.findAll("div", attrs={"attachment-thumb"}):
-        for link in div.findAll('a'):
+    for div in soup.findAll("tr", attrs={'class': 'bz_contenttype_text_plain bz_patch'}):
+        for link in div.findAll('a', attrs={'title': 'View the content of the attachment'}):
             url = link.attrs['href']
             patch_urls.append(url)
     return patch_urls
