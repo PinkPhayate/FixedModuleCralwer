@@ -121,11 +121,13 @@ def crawl_versions(url_json):
         jobs = []
         modules = []
         print('[INFO] start to extract fixed module of {} '.format(version))
-        print('[INFO] this version has {} fixed modules'
-              .format(len(url_array)))
+        # print('[INFO] this version has {} fixed modules'
+            #   .format(len(url_array)))
         for url in tqdm(url_array):
             module_set = find_bug_module(url)
             modules.extend(module_set)
+        print('[INFO] num of extracted module:  {}/{} '
+              .format(len(modules, len(url_array))))
         job = Process(target=export_bug_modules, args=(version, modules))
         jobs.append(job)
         job.start()
