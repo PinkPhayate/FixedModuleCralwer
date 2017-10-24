@@ -4,11 +4,14 @@ import sys
 from urllib import request
 from multiprocessing import Process
 from tqdm import tqdm
+from logging import getLogger
+error_logger = getLogger("error_log")
+report_logger = getLogger("report_log")
 
 PATCH_DOMAIN_URL = 'https://bz.apache.org/bugzilla/'
 MODULE_POST_STRING = '.java'
 METRICS_DIR = ''
-
+logger = getLogger("crawler")
 
 def export_bug_modules(version, module_set):
     filename = 'poi_{}_bgmd.csv'.format(version)
@@ -40,7 +43,7 @@ def get_fixed_bug_url(url):
             ary = version.split(' ')
             versions.append(ary[1])
     versions.pop(0)     # XXX: なんで？
-    print('version size: {}'.format(len(versions)))
+    report_logger.info('version size: {}'.format(len(versions)))
 
     # extract fixed list
     url_dict = {}
@@ -101,8 +104,8 @@ def find_bug_module(url):
     try:
         patch_urls = get_patch_file_url(url)
     except:
-        print('this bug report couldnt be read patch files, url: {}'
-              .format(url))
+        error_logger.error('this bug report couldnt be read patch files, url: {}'
+                           .format(url))
         return []
     for patch_url in patch_urls:
         patch_url = '{}/{}'.format(PATCH_DOMAIN_URL, patch_url)
@@ -110,24 +113,24 @@ def find_bug_module(url):
             modules = extract_bug_module_name(patch_url)
             bug_module_map.extend(modules)
         except:
-            print('[ERROR] this patch file could not open: {}'
-                  .format(patch_url))
+            error_logger.error('this patch file could not open: {}'
+                               .format(patch_url))
 
     return list(set(bug_module_map))
 
 def crawl_versions(url_json):
-    print('[INFO] versions: {}'.format(url_json.keys()))
+    report_logger.info('versions: {}'.format(url_json.keys()))
     for version, url_array in url_json.items():
         jobs = []
         modules = []
-        print('[INFO] start to extract fixed module of {} '.format(version))
-        # print('[INFO] this version has {} fixed modules'
-            #   .format(len(url_array)))
+        report_logger.info('start to extract fixed module of {} '.format(version))
         for url in tqdm(url_array):
             module_set = find_bug_module(url)
             modules.extend(module_set)
-        print('[INFO] num of extracted module:  {}/{} '
-              .format(len(modules, len(url_array))))
+        log_msg = 'version: {} num of extracted module:  {}/{} '\
+            .format(version, len(modules), len(url_array))
+        report_logger.info(log_msg)
+
         job = Process(target=export_bug_modules, args=(version, modules))
         jobs.append(job)
         job.start()
