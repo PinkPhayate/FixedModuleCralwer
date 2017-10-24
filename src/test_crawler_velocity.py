@@ -11,8 +11,8 @@ def test_get_patch_file_url():
     print(path_url)
 
 def test_extract_bug_module_name():
-    patch_url = 'https://bz.apache.org/bugzilla/attachment.cgi?id=34954'
-    modules = cp.extract_bug_module_name(patch_url)
+    patch_url = 'https://issues.apache.org/jira/secure/attachment/12458997/velocity-785.patch'
+    modules = cv.extract_bug_module_name(patch_url)
     print(modules)
 
 # test_get_fixed_bug_url()

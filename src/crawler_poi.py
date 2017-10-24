@@ -11,7 +11,6 @@ report_logger = getLogger("report_log")
 PATCH_DOMAIN_URL = 'https://bz.apache.org/bugzilla/'
 MODULE_POST_STRING = '.java'
 METRICS_DIR = ''
-logger = getLogger("crawler")
 
 def export_bug_modules(version, module_set):
     filename = 'poi_{}_bgmd.csv'.format(version)
@@ -93,10 +92,10 @@ def extract_bug_module_name(patch_url):
                 modules.append(module_name)
         except Exception:
             lines = []
-            lines.append('[ERROR] this line couldnt convert unicode')
+            lines.append('this line couldnt convert unicode')
             lines.append('patch_url: {}, line: {}'.format(patch_url, idx))
             lines.append('file content: {}'.format(line))
-            export_error_log(lines)
+            error_logger.error(lines)
     return modules
 
 def find_bug_module(url):
