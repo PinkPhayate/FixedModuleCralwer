@@ -6,7 +6,7 @@ def test_get_fixed_bug_url():
     print(url_dict)
 
 def test_get_patch_file_url():
-    url = 'https://issues.apache.org/jira/browse/VELOCITY-785'
+    url = 'https://issues.apache.org/jira/browse/VELOCITY-731'
     path_url = cv.get_patch_file_url(url)
     print(path_url)
 
