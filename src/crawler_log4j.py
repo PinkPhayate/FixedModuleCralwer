@@ -37,13 +37,13 @@ def get_fixed_bug_url(url):
     # extract fixed list
     url_dict = {}
     version_idx = 0
-    for table in soup.findAll('table', attrs={'class': 'standard'}):
+    for table in soup.findAll('table', attrs={'class': 'bodyTable'}):
         urls = []
         for tr in table.findAll('tr'):
             img = tr.find('img')
             url = tr.find('a')
             if img is not None and url is not None and\
-               img.attrs['src'] == 'images/fix.png':
+               img.attrs['src'] == 'images/fix.gif':
                     urls.append(url.attrs['href'])
         if 0 < len(urls):
             url_dict[versions[version_idx]] = urls
