@@ -21,7 +21,13 @@ def test_extract_bug_module_name():
     modules = ch.extract_bug_module_name(patch_url)
     print(modules)
 
+def test_crawl_versions():
+    url_dict = {}
+    url_dict['1.2.2'] = ['/jira/browse/HIVE-9013', '/jira/browse/HIVE-10996']
+    ch.crawl_versions(url_dict)
+
 # test_get_fixed_bug_url()
 # test_get_fixed_report_url()
-test_get_patch_file_url()
+# test_get_patch_file_url()
 # test_extract_bug_module_name()
+test_crawl_versions()

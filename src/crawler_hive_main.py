@@ -15,14 +15,14 @@ def config_logger():
     sh = logging.StreamHandler()
     sh.setFormatter(formatter)
 
-    error_logger = logging.getLogger("error_log")
+    error_logger = logging.getLogger("error_log_hive")
     # error_logger.addHandler(sh)
     error_logger.setLevel(logging.ERROR)
     fh = logging.FileHandler(filename=LOG_DIR+"error_hive.log")
     fh.setFormatter(formatter)
     error_logger.addHandler(fh)
 
-    report_logger = logging.getLogger("report_log")
+    report_logger = logging.getLogger("report_log_hive")
     report_logger.addHandler(sh)
     report_logger.setLevel(logging.INFO)
     fh = logging.FileHandler(filename=LOG_DIR+"report_hive.log")

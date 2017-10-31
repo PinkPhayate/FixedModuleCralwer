@@ -5,8 +5,8 @@ from urllib import request
 from multiprocessing import Process
 from tqdm import tqdm
 from logging import getLogger
-error_logger = getLogger("error_log")
-report_logger = getLogger("report_log")
+error_logger = getLogger("error_log_hive")
+report_logger = getLogger("report_log_hive")
 
 PATCH_DOMAIN_URL = 'https://issues.apache.org'
 MODULE_POST_STRING = '.java'
@@ -101,6 +101,7 @@ def find_bug_module(url):
     bug_module_map = []
     try:
         patch_urls = get_patch_file_url(url)
+        patch_urls = filter(lambda x: x.split('.')[-1]=='patch', patch_urls)
     except:
         error_logger.error('this bug report couldnt be read patch files, url: {}'
                            .format(url))
@@ -108,7 +109,7 @@ def find_bug_module(url):
     for patch_url in patch_urls:
         patch_url = '{}/{}'.format(PATCH_DOMAIN_URL, patch_url)
         try:
-            modules = extract_bug_module_name(patch_url)
+            modules = extract_bug_module_name(list(patch_url))
             bug_module_map.extend(modules)
         except:
             error_logger.error('this patch file could not open: {}'
@@ -127,7 +128,7 @@ def crawl_versions(url_json):
             module_set = find_bug_module(url)
             modules.extend(module_set)
         log_msg = 'version: {} num of extracted module:  {}/{} '\
-            .format(version, len(modules), len(url_array))
+            .format(version, len(modules), len(list(url_array)))
         report_logger.info(log_msg)
 
         job = Process(target=export_bug_modules, args=(version, modules))
