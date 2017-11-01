@@ -14,7 +14,7 @@ RELEASE_NOTE_URL = 'https://issues.apache.org'
 METRICS_DIR = ''
 
 def export_bug_modules(version, module_set):
-    filename = 'hive_{}_bgmd.csv'.format(version)
+    filename = METRICS_DIR + 'hive_{}_bgmd.csv'.format(version)
     with open(filename, mode='w', encoding='utf-8') as fh:
         for module in module_set:
             fh.write('{}\n'.format(module))
