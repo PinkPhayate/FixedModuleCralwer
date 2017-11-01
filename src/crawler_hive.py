@@ -106,10 +106,10 @@ def find_bug_module(url):
         error_logger.error('this bug report couldnt be read patch files, url: {}'
                            .format(url))
         return []
-    for patch_url in patch_urls:
-        patch_url = '{}/{}'.format(PATCH_DOMAIN_URL, patch_url)
+    for patch_url in list(patch_urls):
+        patch_url = '{}{}'.format(PATCH_DOMAIN_URL, patch_url)
         try:
-            modules = extract_bug_module_name(list(patch_url))
+            modules = extract_bug_module_name(patch_url)
             bug_module_map.extend(modules)
         except:
             error_logger.error('this patch file could not open: {}'
@@ -124,13 +124,13 @@ def crawl_versions(url_json):
         modules = []
         report_logger.info('start to extract fixed module of {} '.format(version))
         url_array = map(lambda x: RELEASE_NOTE_URL + x, url_array)
-        for url in tqdm(list(url_array)):
+        url_array = list(url_array)
+        for url in tqdm(url_array):
             module_set = find_bug_module(url)
             modules.extend(module_set)
         log_msg = 'version: {} num of extracted module:  {}/{} '\
-            .format(version, len(modules), len(list(url_array)))
+            .format(version, len(modules), len(url_array))
         report_logger.info(log_msg)
-
         job = Process(target=export_bug_modules, args=(version, modules))
         jobs.append(job)
         job.start()

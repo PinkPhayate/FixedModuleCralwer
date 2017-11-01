@@ -1,12 +1,13 @@
 import crawler_hive as ch
+import crawler_optionizer as co
 from logging import getLogger
 import sys
 args = sys.argv
 LOG_DIR = args[1] if 1 < len(args) else ''
-
 def main():
     url = 'https://hive.apache.org/downloads.html'
-    url_dict = ch.get_fixed_bug_url(url)
+    # url_dict = ch.get_fixed_bug_url(url)
+    url_dict = co.skip_version(url_dict, skip_versions=skip_versions)
     ch.crawl_versions(url_dict)
 
 def config_logger():
